@@ -1,0 +1,41 @@
+
+<doctype html>
+<title>Welcome to your loan portal.</title>
+<h1>Welcome to your loan portal.</h1> 
+     <p>We will collect some basic information about you now to get you started in your application. 
+     Please login/register</p>
+
+<p><a href="{{ url_for('.add_client_view', client_type=user) }}"> {{ user }} New Client </a></p>
+<p><a href="{{ url_for('.returning_client_view') }}"> Returning Client </a></p>
+
+<p>
+	{% with messages = get_flashed_messages() %}
+	  {% if messages %}
+		<ul class=flashes>
+		{% for message in messages %}
+		  <li>{{ message }}</li>
+		{% endfor %}
+		</ul>
+	  {% endif %}
+	{% endwith %}
+</p>
+
+{{ table }}
+
+<!--
+<html>
+   <body>
+      <form action = "http://localhost:5000/result" method = "POST">
+      	 <h1>Welcome to your loan portal.</h1> 
+         <p>Welcome to your loan portal. We will collect some basic information about you now to get you started in your application. 
+         Please answer the following questions.</p>
+         <p>What is your full name? <input type = "text" name = "Name" /></p>
+         <p>What is your age? <input type = "number" name = "Age" /></p>
+         <p>Is this loan for a new purchase or a refinance? </p>
+         <p>Refinance <input type = "checkbox" name = "Option"> <br>
+         New Loan <input type = "checkbox" name = "Option" /></p> 
+         <p><input type = "submit" value = "next" /></p>
+      </form>
+   </body>
+</html>
+-->

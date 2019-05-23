@@ -1,0 +1,46 @@
+<doctype html>
+<title>New Client - Loan Application</title>
+{% if client_type != "co-borrower's" %}
+<h2><center>Welcome to your loan portal.</center><br></h2>
+<h4>We will collect some basic information about you now to get you started in your application. <br>
+Please answer the following questions</h4>
+{% else %}
+<h4>Co-borrower Details</h4>
+{% endif %}
+<form method="post" action="/add/{{client_type}}">
+    <dl>
+		<div> 
+			<label>What is your {{client_type}} full name?</label>
+			<input id="inputName" data-rule="fullName" aria-invalid="false" aria-required="true" name="inputName" value="" type="text" autocomplete="off">
+			<span class="error" role="alert" aria-hidden="true">This is a required field.</span>
+		</div>
+		<div> 
+			<label>What is your {{client_type}} age?</label>
+			<input id="inputAge" aria-required="true" aria-invalid="false" data-rule="age" name="inputAge" value="" type="number" autocomplete="off">
+			<span class="error" role="alert" aria-hidden="true">This is a required field.</span>
+		</div>
+		{% if client_type != "co-borrower's" %}
+		<p>
+			<input name="inputEmail" value="" type="text" placeholder="Email" autocomplete="off" required>
+		</p>
+		<p>
+			<input name="inputPassword" value="" type="password" placeholder="Password" autocomplete="off" required>
+		</p>
+
+
+		<div>
+			<label>Is this loan for a new purchase or a refinance?</label>
+			<input name="inputOption" value="Refinance" type="radio" placeholder="Option" autocomplete="off" />
+			<input name="inputOption" value="New" type="radio" placeholder="Option" />
+		</div>
+
+		{% endif %}
+    </dl>
+    <p>
+		<input type="submit" value="Next">
+	</p>
+</form>
+
+
+{{ table }}
+

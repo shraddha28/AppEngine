@@ -1,0 +1,26 @@
+version: "2"
+services:
+    python_code:
+        build:
+            context: .
+            dockerfile: dockerfile-api
+        ports:
+            - 5000
+        networks: 
+            - front-tier
+            - back-tier
+        links:
+            - mysql_db
+
+    mysql_db:
+        container_name: "mysql_db"
+        build:
+            context: .
+            dockerfile: dockerfile-mysql
+        ports:
+            - 6000:3306
+        networks:
+            - back-tier
+        env_file: mysql_env
+        volumes:
+            - /storage/docker/mysql-datadir:/var/lib/mysql

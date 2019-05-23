@@ -1,0 +1,26 @@
+FROM mysql:5.7
+ADD init-db.sql /docker-entrypoint-initdb.d/
+EXPOSE 3306
+
+sudo docker ps
+sudo docker images
+sudo docker run --name mysqlDB -e MYSQL_ROOT_PASSWORD=rootpass -d mysql/mysql-server:5.7 
+sudo docker images
+sudo docker exec -it mysqlDB mysql -uroot -p
+
+#to list all active containers
+docker ps
+#to list all containers
+docker ps -a
+docker ps --help
+
+#to stop docker container
+docker stop [container ID]
+#to remove docker container
+docker rm [container id]
+
+#to search of available pre-built images from docker registry
+docker search [application name]
+
+#to pull the image
+docker pull [image name]
