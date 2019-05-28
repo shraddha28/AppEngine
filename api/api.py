@@ -12,8 +12,6 @@ import logging
 
 
 #app.config["DEBUG"] = True
-conn = mysql.connect()
-cursor = conn.cursor()
 
 FORMAT = "[%(filename)s:%(lineno)s - %(funcName)20s() ] %(message)s"
 logger = logging.getLogger('root')
@@ -24,6 +22,7 @@ logger.setLevel(logging.DEBUG)
 def db_connect():
 	"""This function is the first entry point of the app"""
 	try:
+		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
 		cursor.execute("SELECT * FROM tbl_client")
 		rows = cursor.fetchall()
@@ -35,7 +34,9 @@ def db_connect():
 		dateTimeObj = datetime.now()
 		print  dateTimeObj
 		logger.exception(e)		
-		
+	finally:
+		conn.close()
+		cursor.close()
 		
 	
 @app.route('/blend/', methods=['POST','GET'])
@@ -43,20 +44,25 @@ def home_page():
 	return redirect("/")
 
 @app.route('/blend/<client_type>/', methods=['POST'])
-@app.route('/blend/<client_type>/<int:clientId>', methods=['POST'])
-def add_clientDetails(client_type="your", clientId=None):
+@app.route('/blend/<client_type>/<clientId>', methods=['POST'])
+def add_clientDetails(client_type, clientId=None):
 	""" Workflow Task1: This function accepts client details and stores in the DB """ 
 
 	client_type = client_type
 	try:
 		if client_type == "your":
 			_name = request.form['inputName']
+			_name = +name.strip())
 			_age = request.form['inputAge']
+			_age = _age.strip()
 			_username = request.form['inputUsername']
+			_username = _username.strip()
 			_option = request.form['inputOption']
 			# saving in DB
 			sql = "INSERT INTO tbl_client(client_name, client_age, client_username, client_option) VALUES(%s, %s, %s, %s)"
 			data = (_name, _age, _username, _option )
+			conn = mysql.connect()
+			cursor = conn.cursor()
 			cursor.execute(sql, data)
 			cursor.execute("SELECT * FROM tbl_client WHERE client_username = %s", _username)
 			records = cursor.fetchone()
@@ -77,6 +83,8 @@ def add_clientDetails(client_type="your", clientId=None):
 			_coborrowerName = request.form['inputName']
 			_coborrowerAge = request.form['inputAge']
 			_id = clientId
+			conn = mysql.connect()
+			cursor = conn.cursor()
 			cursor.execute("SELECT * FROM tbl_client WHERE id=%s", _id)
 			records = cursor.fetchone()
 			if _coborrowerName.lower() == records[1].lower():
@@ -87,6 +95,8 @@ def add_clientDetails(client_type="your", clientId=None):
 			elif  _coborrowerName.lower() != records[1].lower():
 				sql = "UPDATE tbl_client SET coborrower_name=%s, coborrower_age=%s WHERE id=%s"
 				data = (_coborrowerName, _coborrowerAge, _id)
+				conn = mysql.connect()
+				cursor = conn.cursor()
 				cursor.execute(sql, data)
 				conn.commit()
 				cursor.execute("SELECT * FROM tbl_client WHERE id=%s", _id)
@@ -101,7 +111,10 @@ def add_clientDetails(client_type="your", clientId=None):
 			print(e)
 		else:
 			dateTimeObj = datetime.now()
-			logger.exception(dateTimeObj)		
+			logger.exception(dateTimeObj)	
+	finally:
+		conn.close()
+		cursor.close()	
 	
 
 @app.route('/blend/refinance/<int:clientId>', methods=['POST'])
@@ -111,11 +124,16 @@ def refinance_clientDetails(clientId):
 	try:
 		_id = clientId
 		_street = request.form['inputStreet']
+		_street = +street.strip()
 		_city = request.form['inputCity']
+		_city = _city.strip()
 		_state = request.form['inputState']
 		_zipcode = request.form['inputZipcode']
+		_zipcode = _zipcode.strip()
 		sql = "UPDATE tbl_client SET client_street=%s, client_city=%s, client_state=%s, client_zipcode=%s WHERE id=%s"
 		data = (_street, _city, _state, _zipcode, _id,)
+		conn = mysql.connect()
+		cursor = conn.cursor()
 		cursor.execute(sql, data)
 		conn.commit()
 		dateTimeObj = datetime.now()
@@ -123,8 +141,11 @@ def refinance_clientDetails(clientId):
 		return render_template('co-borrower.html', clientId=clientId)
 	except Exception as e:
 		dateTimeObj = datetime.now()
-		logger.exception(dateTimeObj)		
-	
+		logger.exception(dateTimeObj)	
+	finally:
+		conn.close()
+		cursor.close()	
+
 
 @app.route('/blend/co-borrower/<int:clientId>', methods=['POST'])
 def coborrower_clientDetails(clientId):
@@ -133,6 +154,9 @@ def coborrower_clientDetails(clientId):
 	try:
 		_id = clientId
 		_choice = request.form['inputChoice']
+		_choice = _choice.strip()
+		conn = mysql.connect()
+		cursor = conn.cursor()
 		if _choice.lower() == "yes":
 			dateTimeObj = datetime.now()
 			logger.info("%s Redirecting to co-borrower's page (Task1) for clientID=%d ",dateTimeObj, _id)
@@ -152,9 +176,11 @@ def coborrower_clientDetails(clientId):
 			return "Couldn't register the client. Please check the details entered"
 	except Exception as e:
 		dateTimeObj = datetime.now()
-		logger.exception(dateTimeObj)		
-	
-
+		logger.exception(dateTimeObj)
+	finally:
+		conn.close()
+		cursor.close()	
+		
 
 @app.route('/blend/clientDetails/thankYou')
 def close_db_connect():
