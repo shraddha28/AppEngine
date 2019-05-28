@@ -5,7 +5,7 @@ services:
             context: .
             dockerfile: dockerfile-api
         ports:
-            - 5000:5000
+            - 5000
         networks: 
             - front-tier
             - back-tier
