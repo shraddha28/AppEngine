@@ -1,18 +1,19 @@
 # Use an official Python runtime as an image
 FROM python:2.7
 
+# Install any needed packages specified in requirements.txt
+ADD requirements.txt /tmp/requirements.txt
+RUN pip install -r /tmp/requirements.txt
+
 # The EXPOSE instruction indicates the ports on which a container # # will listen for connections
 # Since Flask apps listen to port 5000  by default, we expose it
 EXPOSE 5000
 
-# Sets the working directory 
-WORKDIR /app
-
-# Install any needed packages specified in requirements.txt
-COPY requirements.txt /app
-RUN pip install -r requirements.txt
-
 # Run api.py when the container launches
-COPY api.py /app
-CMD python api.py
+ADD /templates /templates/.
+ADD tables.py .
+ADD app.py .
+ADD db_config.py .
+ADD api.py .
+CMD ["python", "api.py"]
 

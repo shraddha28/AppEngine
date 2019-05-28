@@ -1,3 +1,7 @@
 Flask
 MySQL-python
 mysql-connector
+pymysql
+flask-mysql
+flask_table
+datetime

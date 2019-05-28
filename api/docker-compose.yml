@@ -5,15 +5,15 @@ services:
             context: .
             dockerfile: dockerfile-api
         ports:
-            - 5000
+            - 5000:5000
         networks: 
             - front-tier
             - back-tier
         links:
-            - mysql_db
+            - db_blend
 
-    mysql_db:
-        container_name: "mysql_db"
+    db_blend:
+        container_name: "api_db_blend"
         build:
             context: .
             dockerfile: dockerfile-mysql
@@ -22,5 +22,25 @@ services:
         networks:
             - back-tier
         env_file: mysql_env
-        volumes:
+        volumes:    
             - /storage/docker/mysql-datadir:/var/lib/mysql
+
+    lb:
+        image: dockercloud/haproxy
+        ports:
+            - 8080:80
+        networks: 
+            - front-tier
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock 
+        links:
+            - python_code
+
+networks:
+    front-tier: 
+        driver: bridge
+    back-tier:
+        driver: bridge
+
+
+

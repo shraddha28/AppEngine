@@ -2,28 +2,30 @@
 <title>New Client - Loan Application</title>
 {% if client_type != "co-borrower's" %}
 <h2><center>Welcome to your loan portal.</center><br></h2>
+<h3>{{errorMessage}}</h3>
 <h4>We will collect some basic information about you now to get you started in your application. <br>
 Please answer the following questions</h4>
 {% else %}
+{{errorMessage}}
 <h4>Co-borrower Details</h4>
 {% endif %}
-<form method="post" action="/home/{{client_type}}/{{clientId}}">
+<form method="post" action="/blend/{{client_type}}/{{clientId}}">
     <dl>
-		<p> What is your {{client_type}} full name?
+		<p> What is {{client_type}} full name?
 			<input name="inputName" value="" type="text" autocomplete="off" 
-			required pattern="^[A-Za-z]+\s[A-Za-z]+$" title="<FirstName> <LastName>">
+			required pattern="^[A-Za-z]+\s[A-Za-z]+\s*$" title="<FirstName> <LastName>">
 		</p>
-		<p> What is your {{client_type}} age?
+		<p> What is {{client_type}} age?
 			<input name="inputAge" value="" type="number" autocomplete="off" required min=18 max=108>
 		</p>
 		{% if client_type != "co-borrower's" %}
-		<p>
+		<p> 
 			<input name="inputUsername" value="" type="text" placeholder="Username" minlength="5" maxlength="20" autocomplete="off" 
 			title="Username must be in the length range [5-20]" required>
 		</p>
 		<p>Is this loan for a new purchase or a refinance?</p>
 			<input name="inputOption" value="Refinance" type="radio" placeholder="Option" autocomplete="off"> Refinance
-			<input name="inputOption" value="New" type="radio" placeholder="Option" > Purchase
+			<input name="inputOption" value="New Purchase" type="radio" placeholder="Option" > Purchase
 		</p>
 		{% endif %}
     </dl>

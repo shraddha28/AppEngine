@@ -1,10 +1,11 @@
 <doctype html>
 <title>Refinance Application</title>
 <h2>Co-borrower details</h2>
-<form method="post" action="/home/{{client_type}}/co-borrower/{{clientId}}/details">
+<form method="post" action="/blend/co-borrower/{{clientId}}">
     <dl>
-		<p> Are you applying with a co-corrower?
-			<input name="inputChoice" value="" type="boolean" placeholder="Choice" autocomplete="off" required>
+		<p> Are you applying with a co-corrower? (yes/no)
+			<input name="inputChoice" value="" type="boolean" placeholder="Choice" autocomplete="off"  pattern="^(?i)[yes|no]*$"
+			title='Please enter valid response (Yes/No)' required >
 		</p>
     </dl>
     <p>

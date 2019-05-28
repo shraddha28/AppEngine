@@ -1,7 +1,30 @@
 <doctype html>
 <title>Client Details - Thank you</title>
-<form method="post" action="/clientDetails/thankyou">
+<form method="post" action="blend/clientDetails/thankYou" >
 <h2><center>Thank you for your submission.</center><br></h2>
+<h4>Please find below the details of your application:</h4>
+	<dl>
+		<p> Your full name: {{ value[1] }}
+		<br>  Your Age: {{ value[2] }}
+		<br> Username: {{ value[3] }}
+		<br> Application type: {{ value[4] }}
+		</p>
+		{% if value[5] != None %}
+		<p> Your Adress Details: <br> Street Address: {{ value[5] }}
+		<br> City: {{ value[6] }}
+		<br> State: {{ value[7] }}
+		<br> Zipcode: {{ value[8] }}
+		</p> 
+		{% endif %}
+		{% if value[9] != None %}
+		<p> Co-borrower's name: {{ value[9] }} 
+		<br> Co-borrower's age: {{ value[10] }} 
+		</p>
+		{% else %}
+		<p> You have decided to apply for the loan without a co-borrower
+		</p>
+		{% endif %}
+    </dl>
 </form>
 
 
