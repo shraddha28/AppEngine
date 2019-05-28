@@ -95,7 +95,6 @@ def add_clientDetails(client_type="your", clientId=None):
 				records = cursor.fetchone()
 				""" Workflow Task4: Display ThankYou message and display client details entered in the application"""
 				return render_template("final.html", value= records)
-				#return redirect("/blend/clientDetails/thankYou", clientDetails=records)
 	except Exception as e:
 		if e[0] == 1062:
 			return render_template('add.html', client_type = client_type, errorMessage="User with entered username already exists, please re-enter your details")
@@ -146,6 +145,7 @@ def coborrower_clientDetails(clientId):
 			records = cursor.fetchone()
 			dateTimeObj = datetime.now()
 			logger.info("%s Redirecting to ThankYou page for clientID=%d ",dateTimeObj, _id)
+			""" Workflow Task4: Display ThankYou message and display client details entered in the application"""			
 			return render_template('final.html', value=records)
 			#return redirect("/blend/clientDetails/thankYou", value=records)
 		else:
@@ -167,20 +167,19 @@ def close_db_connect():
 def page_not_found(error):
 	dateTimeObj = datetime.now()
 	logger.exception(dateTimeObj)		
-	return render_template('404.html'), 404
+	return render_template('404.html'),404
 
 @app.errorhandler(500)
-def internal_error(error):
+def internal_server_error(error):
 	dateTimeObj = datetime.now()
 	logger.exception(dateTimeObj)		
-	return render_template('500.html')
+	return render_template('500.html'),500
 
 @app.errorhandler(405)
-def internal_error(error):
+def method_not_allowed_error(error):
 	dateTimeObj = datetime.now()
 	logger.exception(dateTimeObj)		
-	return render_template('500.html')
-
+	return render_template('405.html'),405
 
 
 if __name__ == "__main__":
