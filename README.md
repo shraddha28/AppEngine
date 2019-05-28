@@ -2,7 +2,7 @@
 ## File Description
 ```
 •	api.py - The python code for workflow app-engine
-•	app.py - Flask application
+•	app.py - Creates a flask instance and also configures a secret key, which is required for the application’s session.
 •	db_config.py - Database config file (database username="root", password="password")
 •	tables.py - Client database entries in a table format to provide easy access of complete client database
 •	dockerfile-mysql - Dockerfile to build the MYSQL DB image
@@ -45,8 +45,8 @@ once the above command returns (approximately 60s)
 data directory is mapped to /storage/docker/mysql-datadir The python_code uses python package Flask
 which listens on port 5000 on the host. 
 
-Now, once the application service is up and running, it can be tested using web interface by going to any
-browser and typing the URL “http:/localhost:8080/”. 
+Now, once the application service is up and running, it can be tested using web interface by going to any localhost
+browser(the same machine where dockers are running) and typing the URL “http:/localhost:8080/”. 
 It can also be tested through command line using curl -> curl http://localhost:8080/
 ```
 
@@ -54,7 +54,7 @@ It can also be tested through command line using curl -> curl http://localhost:8
 ```
 Basic unit testing pointers:
 -	Ensure all 7 dockers are up and running using docker command “sudo docker ps”
--	Go to a web browser and type URL http://localhost:8080/ or http://localhost:8080/blend/. Both
+-	Go to a localhost web browser(the same machine where dockers are running) and type URL http://localhost:8080/ or http://localhost:8080/blend/. Both
 the links will take you to the Workflow Task1
 -	Enter the required details. (All the fields on the Task1 page are mandatory fields). The username
 field is a database restricted unique field. If the entry with a specific username already exists, it
@@ -96,6 +96,8 @@ dockers and docker images :
 	for id in `sudo docker ps | awk '{print $1}'`; do sudo docker stop $id; done 
 	for id in `sudo docker ps -a | awk '{print $1}'`; do sudo docker rm $id; done
 	for id in `sudo docker images | awk '{print $3}'`; do sudo docker rmi $id; done
+- If you need the mysql to use the existing database and client table, do not remove it from /var/lib/mysql,
+  else remove the existing database using cmd "rm -rf /var/lib/mysql"
 -	Then just start the dockers again using the script ./run.sh
 ```
 Please make sure to update tests as appropriate.
