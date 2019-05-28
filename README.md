@@ -1,5 +1,6 @@
-# File description:
-
+# WorkFlow Engine
+## File Description
+```
 •	api.py - The python code for workflow app-engine
 •	app.py - Flask application
 •	db_config.py - Database config file (database username="root", password="password")
@@ -11,8 +12,11 @@
 •	docker-compose.yml - Docker compose YAML file for container configuration
 •	requirements.txt - Packages to be installed in the Python Application Image
 •	run.sh - To build and start all the containers. Currently, scales python_app to 5 instances. Value can be modified in run.sh.
+```
 
-# Considering a Linux Ubuntu Distribution, please follow below mentioned steps to setup Docker environment:
+## Installation
+```
+Considering a Linux Ubuntu Distribution, please follow below mentioned steps to setup Docker environment:
 # Run the below commands to install Docker environment:
 sudo apt-get install docker
 sudo apt-get install docker.io
@@ -24,19 +28,26 @@ sudo curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-c
 #Apply executable permissions to the binary:
 sudo chmod +x /usr/local/bin/docker-compose
 #To verify the installation, run the below command:
-docker-compose --version
+docker-compose –version
+```
 
+## Running the application
+
+```
 # Run the below command sequence to start the application service. Make sure you are the root user and run.sh has executable permissions 
 cd AppEngine/api
 ./run.sh
 
-# The above command will create the dockers. It will start 7 dockers, 1 for the database client, 1 for loadbalancer (haProxy) and 5 python application dockers. Please wait for the system to be up and stable once the above command returns (approximately 60s) 
-# The mysql container runs on port 3306 on the container and is mapped to port 6000 on the host. The data directory is mapped to /storage/docker/mysql-datadir The python_code uses python package Flask which listens on port 5000 on the host. 
+#The above command will create the dockers. It will start 7 dockers, 1 for the database client, 1 for loadbalancer (haProxy) and 5 python application dockers. Please wait for the system to be up and stable once the above command returns (approximately 60s) 
+#The mysql container runs on port 3306 on the container and is mapped to port 6000 on the host. The data directory is mapped to /storage/docker/mysql-datadir The python_code uses python package Flask which listens on port 5000 on the host. 
 
-# Now, once the application service is up and running, it can be tested using web interface by going to any browser and typing the URL “http:/localhost:8080/”. 
-# It can also be tested through command line using curl -> curl http://localhost:8080/
+Now, once the application service is up and running, it can be tested using web interface by going to any browser and typing the URL “http:/localhost:8080/”. 
+It can also be tested through command line using curl -> curl http://localhost:8080/
+```
 
-# Basic unit testing pointers:
+## Unit-Testing
+```
+Basic unit testing pointers:
 -	Ensure all 7 dockers are up and running using docker command “sudo docker ps”
 -	Go to a web browser and type URL http://localhost:8080/ or http://localhost:8080/blend/. Both the links will take you to the Workflow Task1
 -	Enter the required details. (All the fields on the Task1 page are mandatory fields). The username field is a database restricted unique field. If the entry with a specific username already exists, it will throw an error to enter a unique username and re-enter the required details on Task1
@@ -66,9 +77,11 @@ o	for id in `sudo docker ps | awk '{print $1}'`; do sudo docker stop $id; done
 o	for id in `sudo docker ps -a | awk '{print $1}'`; do sudo docker rm $id; done
 o	for id in `sudo docker images | awk '{print $3}'`; do sudo docker rmi $id; done
 -	Then just start the dockers again using the script ./run.sh
+```
+Please make sure to update tests as appropriate.
 
-
-# Considerations and enhancements:
+## Considerations and Enhancements
+```
 •	The DB docker storage is mapped to the path /storage/docker/mysql-datadir. This ensures the database entries to be retained even after the DB docker is shutdown or stops running
 •	To ensure a fresh client database everytime the service is re-started with docker setup re-start delete the local directory path /storage/docker/mysql-datadir before running run.sh
 •	The python application scaling is provided using haProxy load balancing thus ensuring high availability of the service and accessibility by multiple users
@@ -76,4 +89,4 @@ o	for id in `sudo docker images | awk '{print $3}'`; do sudo docker rmi $id; don
 •	Since the user data is committed in the database after each task, persistence in the existing design can be easily ensured and further enhanced by maintaining a state variable. This state variable can store the point at which user decided to exit the application. The user details can be retrieved back using the unique database field “username”, which can further be used to retrieve the last stored state of the client application.
 •	One of the enhancements to ensure scalability of the application is to add a replica of database and have a master-slave DB configuration
 
--	
+```
