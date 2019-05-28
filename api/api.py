@@ -52,7 +52,7 @@ def add_clientDetails(client_type, clientId=None):
 	try:
 		if client_type == "your":
 			_name = request.form['inputName']
-			_name = +name.strip())
+			_name = +name.strip()
 			_age = request.form['inputAge']
 			_age = _age.strip()
 			_username = request.form['inputUsername']
